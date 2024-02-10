@@ -1,3 +1,5 @@
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/shcrim/BotMinds/main/CryptoBot/cryptobot.lua"))()
+
 --[[ CREDITS
 
 Original idea made by Aiden123407 and The Bot Company
@@ -6,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.0.5
+-- Current Version: 1.1.0
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -115,6 +117,11 @@ local HttpService = game:GetService("HttpService")
 
 local mode -- Mode 1 is the new system (using TextChatService), mode 2 is the older, regular Chat version
 
+local function createPriceString(price, currency)
+	price = tostring(price)
+	return ("The current price of "..currency.." is $"..price.."!")
+end
+
 local function sendRequest(apiLink)
 	local origTime = tick()
 	local response = HttpService:RequestAsync({
@@ -124,6 +131,14 @@ local function sendRequest(apiLink)
 	local timeTook = tick() - origTime
 	print("Request took "..timeTook.." seconds!")
 	return response
+end
+
+local function findRate(rateTab, term)
+	for i, key in pairs(rateTab) do
+		if i == term then
+			return key
+		end
+	end
 end
 
 local function modifyLink(link, adder)
@@ -235,7 +250,14 @@ if mode == 1 then
 						end
 
 						local modLink = modifyLink(iLink, symbol)
-						sendMessage(sendRequest(modLink))
+						
+						local response = sendRequest(modLink).Body
+						response = HttpService:JSONDecode(response)
+						
+						local rates = response["data"]["rates"]
+						local price = findRate(rates, "USD")
+						
+						sendMessage(createPriceString(price, symbol))
 					end
 				end
 			end
@@ -281,7 +303,12 @@ elseif mode == 2 then
 					end
 
 					local modLink = modifyLink(iLink, symbol)
-					sendMessage(sendRequest(modLink))
+					
+					local response = sendRequest(iLink).Body
+
+					response = HttpService:JSONDecode(response)
+
+					local rates = response["data"]["rates"]
 				end
 			end
 		end
