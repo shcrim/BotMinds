@@ -6,7 +6,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.0.3
+-- Current Version: 1.0.5
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
