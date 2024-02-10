@@ -1,4 +1,4 @@
-{
+
     Bitcoin = "BTC",
     Ethereum = "ETH",
     Solana = "SOL",
@@ -88,4 +88,3 @@
     DODO = "DODO",
     Stratis = "STRAX",
     Raydium = "RAY",
-}
