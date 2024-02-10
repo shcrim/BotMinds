@@ -6,7 +6,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.0.3
+-- Current Version: 1.0.4
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -116,16 +116,20 @@ local HttpService = game:GetService("HttpService")
 local mode -- Mode 1 is the new system (using TextChatService), mode 2 is the older, regular Chat version
 
 local function sendRequest(apiLink)
-	print("Call Requested...")
 	local origTime = tick()
 	local response = HttpService:RequestAsync({
 		Method = "GET",
 		Url = apiLink
 	})
-	print("Call Sent!")
 	local timeTook = tick() - origTime
 	print("Request took "..timeTook.." seconds!")
 	return response
+end
+
+local function modifyLink(link, adder)
+	local newLink = link.."%s"
+	newLink = string.format(newLink, adder)
+	return newLink
 end
 
 repeat task.wait() until LocalPlayer.Character -- Hard to avoid this in terms of mode detection, make sure everything is loaded in etc.
@@ -173,6 +177,16 @@ local function removeCommand(input, command)
 	end
 end
 
+local function formatPrice(original)
+	original = string.lower(original)
+	
+	if string.find(original, " ") then
+		return string.gsub(original, " ", "")
+	else
+		return original
+	end
+end
+
 local function findCommand(message, command)
 	if string.find(message, command) then
 		return true
@@ -209,8 +223,20 @@ if mode == 1 then
 					cooldown()
 				end
 				if findCommand(msgString, "!price") then
+					local symbol
+					local foundCurrency = removeCommand(msgString, "!price")
+					if foundCurrency then
+						if string.len(foundCurrency) > 4 then
+							foundCurrency = formatPrice(foundCurrency)
+							symbol = getSymbol(foundCurrency)
+						else
+							symbol = formatPrice(foundCurrency)
+							symbol = string.upper(symbol) -- This is so you don't have to type out the full name
+						end
 
-					print("Price command executed!")
+						local modLink = modifyLink(iLink, symbol)
+						sendMessage(sendRequest(modLink))
+					end
 				end
 			end
 		end
