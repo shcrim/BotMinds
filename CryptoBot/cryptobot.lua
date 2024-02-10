@@ -1,12 +1,104 @@
 --[[ CREDITS
 
 Original idea made by Aiden123407 and The Bot Company
-Ported to TextChatService by me
+Ported to TextChatService, simplified and reduced length by me
 Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.0.2
+-- Current Version: 1.0.3
+
+-- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
+local symbolTable = {
+	bitcoin = "BTC",
+	ethereum = "ETH",
+	solana = "SOL",
+	tether = "USDT",
+	cardano = "ADA",
+	xrp = "XRP",
+	polkadot = "DOT",
+	avalanche = "AVAX",
+	chainlink = "LINK",
+	litecoin = "LTC",
+	algorand = "ALGO",
+	polygon = "MATIC",
+	stellar = "XLM",
+	cosmos = "ATOM",
+	tezos = "XTZ",
+	filecoin = "FIL",
+	tron = "TRX",
+	vechain = "VET",
+	bittorrent = "BTT",
+	aave = "AAVE",
+	monero = "XMR",
+	maker = "MKR",
+	pancakeswap = "CAKE",
+	eos = "EOS",
+	compound = "COMP",
+	fantom = "FTM",
+	klaytn = "KLAY",
+	okb = "OKB",
+	quant = "QNT",
+	elrond = "EGLD",
+	harmony = "ONE",
+	sushiswap = "SUSHI",
+	thorchain = "RUNE",
+	chiliz = "CHZ",
+	waves = "WAVES",
+	dash = "DASH",
+	decred = "DCR",
+	revain = "REV",
+	zcash = "ZEC",
+	nano = "NANO",
+	telcoin = "TEL",
+	decentraland = "MANA",
+	gala = "GALA",
+	flow = "FLOW",
+	holo = "HOT",
+	celo = "CELO",
+	uma = "UMA",
+	nem = "XEM",
+	zilliqa = "ZIL",
+	ontology = "ONT",
+	bancor = "BNT",
+	ren = "REN",
+	siacoin = "SC",
+	terra = "LUNA",
+	iotex = "IOTX",
+	amp = "AMP",
+	husd = "HUSD",
+	horizen = "ZEN",
+	wazirx = "WRX",
+	sapphire = "SAPP",
+	quantstamp = "QSP",
+	audius = "AUDIO",
+	status = "SNT",
+	chia = "XCH",
+	synthetix = "SNX",
+	wax = "WAXP",
+	skale = "SKL",
+	civic = "CVC",
+	balancer = "BAL",
+	vethortoken = "VTHO",
+	safemoon = "SAFEMOON",
+	zkswap = "ZKS",
+	singularitynet = "AGIX",
+	digibyte = "DGB",
+	sora = "XOR",
+	serum = "SRM",
+	ampleforth = "AMPL",
+	orbs = "ORBS",
+	coti = "COTI",
+	tellor = "TRB",
+	syscoin = "SYS",
+	divi = "DIVI",
+	ardor = "ARDR",
+	zeroswap = "ZEE",
+	swipe = "SXP",
+	dodo = "DODO",
+	stratis = "STRAX",
+	raydium = "RAY",
+}
 
 local TextChatService = game:GetService("TextChatService")
 local LocalPlayer = game.Players.LocalPlayer
@@ -17,7 +109,6 @@ local defaultCooldown = 2 -- This is to avoid Roblox bot detection, etc
 local maxDistance = 12 -- in studs
 local channel
 local Players = game:GetService("Players")
-local sLink = "https://raw.githubusercontent.com/shcrim/BotMinds/main/CryptoBot/symbols.lua"
 local iLink = "https://api.coinbase.com/v2/exchange-rates?currency=" -- Unformatted, needs the symbol added on to the end to work
 
 local HttpService = game:GetService("HttpService")
@@ -25,13 +116,16 @@ local HttpService = game:GetService("HttpService")
 local mode -- Mode 1 is the new system (using TextChatService), mode 2 is the older, regular Chat version
 
 local function sendRequest(apiLink)
-	local success, response = pcall(HttpService.GetAsync, HttpService, apiLink)
-	if success then
-		return HttpService:JSONDecode(response)
-	else
-		warn("Failed to send request:", response)
-		return nil
-	end
+	print("Call Requested...")
+	local origTime = tick()
+	local response = HttpService:RequestAsync({
+		Method = "GET",
+		Url = apiLink
+	})
+	print("Call Sent!")
+	local timeTook = tick() - origTime
+	print("Request took "..timeTook.." seconds!")
+	return response
 end
 
 repeat task.wait() until LocalPlayer.Character -- Hard to avoid this in terms of mode detection, make sure everything is loaded in etc.
@@ -43,6 +137,10 @@ if vers == Enum.ChatVersion.TextChatService then
 	mode = 1
 else
 	mode = 2
+end
+
+local function getSymbol(name)
+	return symbolTable[name]
 end
 
 local function sendMessage(msg)
@@ -145,7 +243,7 @@ elseif mode == 2 then
 				cooldown()
 			end
 			if findCommand(msgString, "!price") then
-				print("Price command executed!")
+				local response = sendRequest("https://api.coinbase.com/v2/exchange-rates?currency=btc")
 			end
 		end
 	end)
