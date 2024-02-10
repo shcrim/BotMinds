@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.3
+-- Current Version: 1.1.4
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -118,6 +118,8 @@ local HttpService = game:GetService("HttpService")
 local mode -- Mode 1 is the new system (using TextChatService), mode 2 is the older, regular Chat version
 
 local function createPriceString(price, currency)
+	price = tonumber(price)
+	price = math.round(price)
 	price = tostring(price)
 	return ("The current price of "..currency.." is $"..price.."!")
 end
