@@ -6,7 +6,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.0.4
+-- Current Version: 1.0.3
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -269,7 +269,20 @@ elseif mode == 2 then
 				cooldown()
 			end
 			if findCommand(msgString, "!price") then
-				local response = sendRequest("https://api.coinbase.com/v2/exchange-rates?currency=btc")
+				local symbol
+				local foundCurrency = removeCommand(msgString, "!price")
+				if foundCurrency then
+					if string.len(foundCurrency) > 4 then
+						foundCurrency = formatPrice(foundCurrency)
+						symbol = getSymbol(foundCurrency)
+					else
+						symbol = formatPrice(foundCurrency)
+						symbol = string.upper(symbol) -- This is so you don't have to type out the full name
+					end
+
+					local modLink = modifyLink(iLink, symbol)
+					sendMessage(sendRequest(modLink))
+				end
 			end
 		end
 	end)
