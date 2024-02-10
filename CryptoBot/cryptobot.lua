@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.4
+-- Current Version: 1.1.5
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -249,8 +249,11 @@ if mode == 1 then
 					sendMessage("CryptoBot is a bot made by BotMinds Collective. This bot is mamadede to send requests to a Cryptocurrency API and send back some info in Roblox.")
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendMessage("!price (sign) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message.")
+					sendMessage("!price (sign) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !list -> Connected Currencies.")
 					cooldown()
+				elseif findCommand(msgString, "!list") then
+					sendMessage(symbolTable)
+					cooldown(1)
 				end
 				if findCommand(msgString, "!price") then
 					local symbol
