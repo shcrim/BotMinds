@@ -6,6 +6,8 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
+-- Current Version: 1.0.2
+
 local TextChatService = game:GetService("TextChatService")
 local LocalPlayer = game.Players.LocalPlayer
 local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
