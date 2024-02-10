@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.2
+-- Current Version: 1.1.3
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -323,7 +323,7 @@ elseif mode == 2 then
 					local rates = response["data"]["rates"]
 					local price = findRate(rates, "USD")
 
-					sendMessage(createPriceString(price, symbol))
+					sendMessage(createPriceString(price, getName(symbol)))
 				end
 			end
 		end
@@ -331,5 +331,3 @@ elseif mode == 2 then
 end
 
 sendMessage("Bot is online!")
-
-sendMessage(createPriceString(10210.432, getName("BTC")))
