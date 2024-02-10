@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.1
+-- Current Version: 1.1.2
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -120,6 +120,19 @@ local mode -- Mode 1 is the new system (using TextChatService), mode 2 is the ol
 local function createPriceString(price, currency)
 	price = tostring(price)
 	return ("The current price of "..currency.." is $"..price.."!")
+end
+
+local function capitalize(str)
+	str=(string.upper(string.sub(str, 1, 1))..string.sub(str, 2, -1)) 
+	return str
+end
+
+local function getName(symbol)
+	for i, key in pairs(symbolTable) do
+		if key == symbol then
+			return capitalize(i)
+		end
+	end
 end
 
 local function sendRequest(apiLink)
@@ -257,7 +270,7 @@ if mode == 1 then
 						local rates = response["data"]["rates"]
 						local price = findRate(rates, "USD")
 						
-						sendMessage(createPriceString(price, symbol))
+						sendMessage(createPriceString(price, getName(symbol)))
 					end
 				end
 			end
@@ -318,3 +331,5 @@ elseif mode == 2 then
 end
 
 sendMessage("Bot is online!")
+
+sendMessage(createPriceString(10210.432, getName("BTC")))
