@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.0
+-- Current Version: 1.1.1
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -303,12 +303,14 @@ elseif mode == 2 then
 					end
 
 					local modLink = modifyLink(iLink, symbol)
-					
-					local response = sendRequest(iLink).Body
 
+					local response = sendRequest(modLink).Body
 					response = HttpService:JSONDecode(response)
 
 					local rates = response["data"]["rates"]
+					local price = findRate(rates, "USD")
+
+					sendMessage(createPriceString(price, symbol))
 				end
 			end
 		end
