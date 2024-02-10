@@ -1,4 +1,4 @@
-local symbols = {
+{
     Bitcoin = "BTC",
     Ethereum = "ETH",
     Solana = "SOL",
