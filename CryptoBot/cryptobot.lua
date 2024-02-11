@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.7"
+local ver = "0.2.9"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -236,6 +236,8 @@ local function findCommand(message, command)
 	end
 end
 
+local filterCooldown = false
+
 if mode == 1 then
 	TextChatService.OnIncomingMessage = function(message)
 		if message.Status == Enum.TextChatMessageStatus.Success then
@@ -249,8 +251,11 @@ if mode == 1 then
 
 			local userName = playerWhoSent.Name
 			if userName == LocalPlayer.Name then
-				if findCommand(message.Text, "##") then
+				if findCommand(message.Text, "##") and filterCooldown == false then
+					filterCooldown = true
 					sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
+					task.wait(7)
+					filterCooldown = false
 				end
 				return
 			end
@@ -263,7 +268,7 @@ if mode == 1 then
 					sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendPrivateMessage("!help -> Info about this bot and how to use it. !price (name) -> Returns price. !version -> Gives current version.", userName)
+					sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
 					cooldown()
 				elseif findCommand(msgString, "!version") then
 					sendMessage("The bot's current version is "..ver)
@@ -326,7 +331,10 @@ elseif mode == 2 then
 		local userName = playerWhoSent.Name
 		if userName == LocalPlayer.Name then
 			if findCommand(message.Message, "##") then
+				filterCooldown = true
 				sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
+				task.wait(7)
+				filterCooldown = false			
 			end
 			return
 		end
@@ -340,7 +348,7 @@ elseif mode == 2 then
 				sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 				cooldown()
 			elseif findCommand(msgString, "!cmds") then
-				sendPrivateMessage("!help -> Info about this bot and how to use it. !price (name) -> Returns price. !version -> Gives current version.", userName)
+				sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
 				cooldown()
 			elseif findCommand(msgString, "!version") then
 				sendMessage("The bot's current version is "..ver)
