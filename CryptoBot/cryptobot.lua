@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.6
+-- Current Version: 1.1.8
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -119,7 +119,8 @@ local cycle = {
 	"I hate Roblox Filtering :angry:",
 	"Who's afraid of the big bad bear?",
 	"Please don't take this as financial advice!",
-	"Prices are rounded to avoid some issues :)"
+	"Prices are rounded to avoid some issues :)",
+	"Try doing !price Bitcoin."
 }
 
 local HttpService = game:GetService("HttpService")
@@ -258,10 +259,10 @@ if mode == 1 then
 			if toggle == true then
 				task.wait(0.1)
 				if findCommand(msgString, "!help") then
-					sendMessage("CryptoBot is a bot made by BotMinds Collective. This bot is mamadede to send requests to a Cryptocurrency API and send back some info in Roblox.")
+					sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendMessage("!price (sign) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !list -> Connected Currencies.")
+					sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message.")
 					cooldown()
 				elseif findCommand(msgString, "!list") then
 					sendMessage(symbolTable)
@@ -280,14 +281,16 @@ if mode == 1 then
 						end
 
 						local modLink = modifyLink(iLink, symbol)
-						
+
 						local response = sendRequest(modLink).Body
 						response = HttpService:JSONDecode(response)
-						
+
 						local rates = response["data"]["rates"]
 						local price = findRate(rates, "USD")
-						
+
 						sendMessage(createPriceString(price, getName(symbol)))
+					else
+						sendMessage("Either you sent an invalid Crypto or we don't support it yet. Please be patient as we continue to grow!")
 					end
 				end
 			end
@@ -317,10 +320,10 @@ elseif mode == 2 then
 		if toggle == true then
 			task.wait(0.1)
 			if findCommand(msgString, "!help") then
-				sendMessage("CryptoBot is a bot made by BotMinds Collective. This bot is mamadede to send requests to a Cryptocurrency API and send back some info in Roblox.")
+				sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
 				cooldown()
 			elseif findCommand(msgString, "!cmds") then
-				sendMessage("!price (sign) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !list -> Connected Currencies.")
+				sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message.")
 				cooldown()
 			elseif findCommand(msgString, "!list") then
 				sendMessage(symbolTable)
@@ -347,6 +350,8 @@ elseif mode == 2 then
 					local price = findRate(rates, "USD")
 
 					sendMessage(createPriceString(price, getName(symbol)))
+				else
+					sendMessage("Either you sent an invalid Crypto or we don't support it yet. Please be patient as we continue to grow!")
 				end
 			end
 		end
