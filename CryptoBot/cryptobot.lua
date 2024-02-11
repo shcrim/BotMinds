@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.8
+-- Current Version: 1.1.9
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -360,7 +360,7 @@ end
 
 sendMessage("Bot is online!")
 
-while task.wait(360) do
+while task.wait(120) do
 	local random = math.random(1, #cycle)
 	sendMessage(cycle[random])
 end
