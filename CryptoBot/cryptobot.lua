@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.4"
+local ver = "0.2.5"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -324,12 +324,12 @@ elseif mode == 2 then
 		end
 
 		local userName = playerWhoSent.Name
-		--if userName == LocalPlayer.Name then
-		--	if findCommand(message.Message, "##") then
-		--		sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
-		--	end
-		--	return
-		--end
+		if userName == LocalPlayer.Name then
+			if findCommand(message.Message, "##") then
+				sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
+			end
+			return
+		end
 
 		local msgString = message.Message
 
