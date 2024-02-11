@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "1.2.0"
+local ver = "0.2.1"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -100,6 +100,12 @@ local symbolTable = {
 	dodo = "DODO",
 	stratis = "STRAX",
 	raydium = "RAY",
+	dogecoin = "DOGE",
+	helium = "HNT",
+	sushi = "SUSHI",
+	loopring = "LRC",
+	the_graph = "GRT",
+	enjincoin = "ENJ"
 }
 
 local TextChatService = game:GetService("TextChatService")
@@ -116,7 +122,6 @@ local iLink = "https://api.coinbase.com/v2/exchange-rates?currency=" -- Unformat
 local cycle = {
 	"Make sure to join the group named The Bot Company!",
 	"Fun Fact: this bot was made in 4 hours as a hobby project!",
-	"I hate Roblox Filtering :angry:",
 	"Who's afraid of the big bad bear?",
 	"Please don't take this as financial advice!",
 	"Prices are rounded to avoid some issues :)",
@@ -195,6 +200,11 @@ local function sendMessage(msg)
 	end
 end
 
+local function sendPrivateMessage(msg, userName)
+	local formatted = string.format("/w %s %s", userName, msg)
+	print(formatted)
+end
+
 local function cooldown(amount)
 	if amount then
 		toggle = false
@@ -259,18 +269,22 @@ if mode == 1 then
 			if toggle == true then
 				task.wait(0.1)
 				if findCommand(msgString, "!help") then
-					sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
+					sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.")
+					sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
 					cooldown()
 				elseif findCommand(msgString, "!version") then
 					sendMessage("The bot's current version is "..ver)
 					cooldown(1)
+				elseif not findCommand(msgString, "!price") then
+					sendPrivateMessage("I couldn't find the command you were looking for. Please make sure you typed it correctly :)", userName)
 				end
 				if findCommand(msgString, "!price") then
 					local symbol
 					local foundCurrency = removeCommand(msgString, "!price")
+					local validSymbol = false
+
 					if foundCurrency then
 						if string.len(foundCurrency) > 4 then
 							foundCurrency = formatPrice(foundCurrency)
@@ -278,19 +292,31 @@ if mode == 1 then
 						else
 							symbol = formatPrice(foundCurrency)
 							symbol = string.upper(symbol) -- This is so you don't have to type out the full name
+
+							if getName(symbol) ~= "" and getName(symbol) ~= nil then
+								validSymbol = true
+							else
+								validSymbol = false
+							end
 						end
+																								
+						if symbol ~= "" and validSymbol == true then
+							local modLink = modifyLink(iLink, symbol)
 
-						local modLink = modifyLink(iLink, symbol)
+							local response = sendRequest(modLink).Body
+							response = HttpService:JSONDecode(response)
 
-						local response = sendRequest(modLink).Body
-						response = HttpService:JSONDecode(response)
+							local rates = response["data"]["rates"]
+							local price = findRate(rates, "USD")
 
-						local rates = response["data"]["rates"]
-						local price = findRate(rates, "USD")
+							if price < 1 then
+								sendMessage("Please note this bot struggles with prices below 0 due to Roblox Moderation. I'm looking for a fix, but its hard :(")
+							end
 
-						sendMessage(createPriceString(price, getName(symbol)))
-					else
-						sendMessage("Either you sent an invalid Crypto or we don't support it yet. Please be patient as we continue to grow!")
+							sendMessage(createPriceString(price, getName(symbol)))
+						else
+							sendMessage("Either you sent an invalid crypto or we don't support it yet. Please be patient as we continue to grow!")
+						end
 					end
 				end
 			end
@@ -308,30 +334,35 @@ elseif mode == 2 then
 		end
 
 		local userName = playerWhoSent.Name
-		if userName == LocalPlayer.Name then
-			if findCommand(message.Text, "##") then
-				sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
-			end
-			return
-		end
+		--if userName == LocalPlayer.Name then
+		--	if findCommand(message.Message, "##") then
+		--		sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
+		--	end
+		--	return
+		--end
 
 		local msgString = message.Message
+
 
 		if toggle == true then
 			task.wait(0.1)
 			if findCommand(msgString, "!help") then
-				sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
+				sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 				cooldown()
 			elseif findCommand(msgString, "!cmds") then
-				sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.")
+				sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
 				cooldown()
 			elseif findCommand(msgString, "!version") then
 				sendMessage("The bot's current version is "..ver)
 				cooldown(1)
+			elseif not findCommand(msgString, "!price") then
+				sendPrivateMessage("I couldn't find the command you were looking for. Please make sure you typed it correctly :)", userName)
 			end
 			if findCommand(msgString, "!price") then
 				local symbol
 				local foundCurrency = removeCommand(msgString, "!price")
+				local validSymbol = false
+
 				if foundCurrency then
 					if string.len(foundCurrency) > 4 then
 						foundCurrency = formatPrice(foundCurrency)
@@ -339,19 +370,31 @@ elseif mode == 2 then
 					else
 						symbol = formatPrice(foundCurrency)
 						symbol = string.upper(symbol) -- This is so you don't have to type out the full name
+
+						if getName(symbol) ~= "" and getName(symbol) ~= nil then
+							validSymbol = true
+						else
+							validSymbol = false
+						end
 					end
+					
+					if symbol ~= "" and validSymbol == true then
+						local modLink = modifyLink(iLink, symbol)
 
-					local modLink = modifyLink(iLink, symbol)
+						local response = sendRequest(modLink).Body
+						response = HttpService:JSONDecode(response)
 
-					local response = sendRequest(modLink).Body
-					response = HttpService:JSONDecode(response)
+						local rates = response["data"]["rates"]
+						local price = findRate(rates, "USD")
 
-					local rates = response["data"]["rates"]
-					local price = findRate(rates, "USD")
+						if price < 1 then
+							sendMessage("Please note this bot struggles with prices below 0 due to Roblox Moderation. I'm looking for a fix, but its hard :(")
+						end
 
-					sendMessage(createPriceString(price, getName(symbol)))
-				else
-					sendMessage("Either you sent an invalid Crypto or we don't support it yet. Please be patient as we continue to grow!")
+						sendMessage(createPriceString(price, getName(symbol)))
+					else
+						sendMessage("Either you sent an invalid crypto or we don't support it yet. Please be patient as we continue to grow!")
+					end
 				end
 			end
 		end
