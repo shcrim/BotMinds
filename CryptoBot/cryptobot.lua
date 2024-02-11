@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.9"
+local ver = "0.3.0"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -220,7 +220,7 @@ end
 
 local function formatPrice(original)
 	original = string.lower(original)
-	
+
 	if string.find(original, " ") then
 		return string.gsub(original, " ", "")
 	else
@@ -294,7 +294,7 @@ if mode == 1 then
 								validSymbol = false
 							end
 						end
-																								
+
 						if symbol ~= "" and validSymbol == true then
 							local modLink = modifyLink(iLink, symbol)
 
@@ -330,11 +330,11 @@ elseif mode == 2 then
 
 		local userName = playerWhoSent.Name
 		if userName == LocalPlayer.Name then
-			if findCommand(message.Message, "##") then
+			if findCommand(message.Text, "##") and filterCooldown == false then
 				filterCooldown = true
 				sendMessage("If Roblox is filtering the messages constantly (sending #'s), please wait a few seconds and send !help.")
 				task.wait(7)
-				filterCooldown = false			
+				filterCooldown = false
 			end
 			return
 		end
