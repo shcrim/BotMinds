@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.2"
+local ver = "0.2.3"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -118,15 +118,6 @@ local maxDistance = 12 -- in studs
 local channel
 local Players = game:GetService("Players")
 local iLink = "https://api.coinbase.com/v2/exchange-rates?currency=" -- Unformatted, needs the symbol added on to the end to work
-
-local cycle = {
-	"Make sure to join the group named The Bot Company!",
-	"Fun Fact: this bot was made in 4 hours as a hobby project!",
-	"Who's afraid of the big bad bear?",
-	"Please don't take this as financial advice!",
-	"Prices are rounded to avoid some issues :)",
-	"Try doing !price Bitcoin."
-}
 
 local HttpService = game:GetService("HttpService")
 
@@ -287,6 +278,7 @@ if mode == 1 then
 						if string.len(foundCurrency) > 4 then
 							foundCurrency = formatPrice(foundCurrency)
 							symbol = getSymbol(foundCurrency)
+							validSymbol = true
 						else
 							symbol = formatPrice(foundCurrency)
 							symbol = string.upper(symbol) -- This is so you don't have to type out the full name
@@ -363,6 +355,7 @@ elseif mode == 2 then
 					if string.len(foundCurrency) > 4 then
 						foundCurrency = formatPrice(foundCurrency)
 						symbol = getSymbol(foundCurrency)
+						validSymbol = true
 					else
 						symbol = formatPrice(foundCurrency)
 						symbol = string.upper(symbol) -- This is so you don't have to type out the full name
@@ -398,8 +391,3 @@ elseif mode == 2 then
 end
 
 sendMessage("Bot is online!")
-
-while task.wait(120) do
-	local random = math.random(1, #cycle)
-	sendMessage(cycle[random])
-end
