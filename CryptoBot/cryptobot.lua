@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.1"
+local ver = "0.2.2"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -202,7 +202,7 @@ end
 
 local function sendPrivateMessage(msg, userName)
 	local formatted = string.format("/w %s %s", userName, msg)
-	print(formatted)
+	sendMessage(formatted)
 end
 
 local function cooldown(amount)
@@ -277,8 +277,6 @@ if mode == 1 then
 				elseif findCommand(msgString, "!version") then
 					sendMessage("The bot's current version is "..ver)
 					cooldown(1)
-				elseif not findCommand(msgString, "!price") then
-					sendPrivateMessage("I couldn't find the command you were looking for. Please make sure you typed it correctly :)", userName)
 				end
 				if findCommand(msgString, "!price") then
 					local symbol
@@ -355,8 +353,6 @@ elseif mode == 2 then
 			elseif findCommand(msgString, "!version") then
 				sendMessage("The bot's current version is "..ver)
 				cooldown(1)
-			elseif not findCommand(msgString, "!price") then
-				sendPrivateMessage("I couldn't find the command you were looking for. Please make sure you typed it correctly :)", userName)
 			end
 			if findCommand(msgString, "!price") then
 				local symbol
