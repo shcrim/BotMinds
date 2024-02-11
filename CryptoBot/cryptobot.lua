@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
--- Current Version: 1.1.9
+local ver = "1.2.0"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -262,10 +262,10 @@ if mode == 1 then
 					sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message.")
+					sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.")
 					cooldown()
-				elseif findCommand(msgString, "!list") then
-					sendMessage(symbolTable)
+				elseif findCommand(msgString, "!version") then
+					sendMessage("The bot's current version is "..ver)
 					cooldown(1)
 				end
 				if findCommand(msgString, "!price") then
@@ -323,10 +323,10 @@ elseif mode == 2 then
 				sendMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!")
 				cooldown()
 			elseif findCommand(msgString, "!cmds") then
-				sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message.")
+				sendMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.")
 				cooldown()
-			elseif findCommand(msgString, "!list") then
-				sendMessage(symbolTable)
+			elseif findCommand(msgString, "!version") then
+				sendMessage("The bot's current version is "..ver)
 				cooldown(1)
 			end
 			if findCommand(msgString, "!price") then
