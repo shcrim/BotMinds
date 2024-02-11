@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.6"
+local ver = "0.2.7"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -263,7 +263,7 @@ if mode == 1 then
 					sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 					cooldown()
 				elseif findCommand(msgString, "!cmds") then
-					sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
+					sendPrivateMessage("!help -> Info about this bot and how to use it. !price (name) -> Returns price. !version -> Gives current version.", userName)
 					cooldown()
 				elseif findCommand(msgString, "!version") then
 					sendMessage("The bot's current version is "..ver)
@@ -340,7 +340,7 @@ elseif mode == 2 then
 				sendPrivateMessage("CryptoBot is a bot made by BotMinds Collective. Try doing !price Bitcoin, or any of your other favorite Cryptos!", userName)
 				cooldown()
 			elseif findCommand(msgString, "!cmds") then
-				sendPrivateMessage("!price (name) -> Returns price. !help -> Info about this bot. !cmds -> Sends this message. !version -> Gives current version.", userName)
+				sendPrivateMessage("!help -> Info about this bot and how to use it. !price (name) -> Returns price. !version -> Gives current version.", userName)
 				cooldown()
 			elseif findCommand(msgString, "!version") then
 				sendMessage("The bot's current version is "..ver)
