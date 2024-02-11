@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.3"
+local ver = "0.2.4"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -355,7 +355,9 @@ elseif mode == 2 then
 					if string.len(foundCurrency) > 4 then
 						foundCurrency = formatPrice(foundCurrency)
 						symbol = getSymbol(foundCurrency)
-						validSymbol = true
+						if symbol then
+							validSymbol = true
+						end
 					else
 						symbol = formatPrice(foundCurrency)
 						symbol = string.upper(symbol) -- This is so you don't have to type out the full name
@@ -366,7 +368,7 @@ elseif mode == 2 then
 							validSymbol = false
 						end
 					end
-					
+
 					if symbol ~= "" and validSymbol == true then
 						local modLink = modifyLink(iLink, symbol)
 
