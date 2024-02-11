@@ -8,7 +8,7 @@ Hybrid is a mix of both :shrug:
 
 -- END CREDITS]]
 
-local ver = "0.2.5"
+local ver = "0.2.6"
 
 -- While I'd love to have this included in a Github Call, I can't really get it to work without taking upwards of a minute :sob:
 local symbolTable = {
@@ -299,7 +299,7 @@ if mode == 1 then
 							local rates = response["data"]["rates"]
 							local price = findRate(rates, "USD")
 
-							if price < 1 then
+							if tonumber(price) < 1 then
 								sendMessage("Please note this bot struggles with prices below 0 due to Roblox Moderation. I'm looking for a fix, but its hard :(")
 							end
 
@@ -378,7 +378,7 @@ elseif mode == 2 then
 						local rates = response["data"]["rates"]
 						local price = findRate(rates, "USD")
 
-						if price < 1 then
+						if tonumber(price) < 1 then
 							sendMessage("Please note this bot struggles with prices below 0 due to Roblox Moderation. I'm looking for a fix, but its hard :(")
 						end
 
