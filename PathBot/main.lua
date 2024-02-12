@@ -6,7 +6,7 @@ Most of the code is forked from my original project, CryptoBot (mainly the messa
 
 ]]
 
-local ver = "0.0.1"
+local ver = "0.0.3"
 
 --[[ TODO:
 
@@ -27,8 +27,8 @@ local RunService = game:GetService("RunService")
 -- CONFIG
 local tunedOutUsers = {}
 local toggle = true
-local defaultCooldown = 2 -- This is to avoid Roblox bot detection, etc
-local maxDistance = 128 -- in studs
+local defaultCooldown = 128 -- This is to avoid Roblox bot detection, etc
+local maxDistance = 4 -- in studs
 local channel
 local mode -- 1/2
 local state = "Idle"
@@ -37,10 +37,13 @@ local state = "Idle"
 
 local function pathfindTo(username, callback)
 	local player = Players:FindFirstChild(username)
+	print(player)
 	if player then
 		local character = player.Character
+		print(character)
 		if character then
 			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			print(humanoid)
 			if humanoid then
 				local path = PathfindingService:CreatePath({
 					AgentRadius = humanoid.HipWidth,
@@ -51,8 +54,9 @@ local function pathfindTo(username, callback)
 					SelectRandomWaypoint = false,
 					SmoothPath = true
 				})
+				print(path)
 				path:ComputeAsync(character.HumanoidRootPart.Position, humanoid:GetTargetPosition())
-
+				
 				-- Update path periodically
 				local connection
 				connection = RunService.Heartbeat:Connect(function()
@@ -62,6 +66,7 @@ local function pathfindTo(username, callback)
 							callback(true) -- Callback with true indicating pathfinding is done
 						else
 							path:ComputeAsync(character.HumanoidRootPart.Position, humanoid:GetTargetPosition())
+							print("Path Updated!")
 						end
 					else
 						connection:Disconnect() -- Stop checking when player is no longer in game
@@ -181,7 +186,10 @@ local function handleChatRecieved(playerWhoSent, msgString)
 				
 				local user = findPlayerFromUser(temp)
 				
+				print(user)
+				
 				if user ~= "" and user ~= nil and user ~= userName and user ~= LocalPlayer.Name then
+					print("Pathfinding began!")
 					toggle = false
 					pathfindTo(user, function(pathfound)
 						if pathfound then
@@ -204,8 +212,9 @@ end
 if mode == 1 then
 	TextChatService.OnIncomingMessage = function(message)
 		if message.Status == Enum.TextChatMessageStatus.Success then
-			local playerWhoSent = message.TextSource
-			
+			local userName = message.TextSource
+			local playerWhoSent = Players:FindFirstChild(tostring(userName))
+						
 			handleChatRecieved(playerWhoSent, message.Text)
 		end	
 	end
@@ -213,7 +222,7 @@ elseif mode == 2 then
 	game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
 		local userName = message.FromSpeaker
 		local playerWhoSent = Players:FindFirstChild(tostring(userName))
-
+		
 		handleChatRecieved(playerWhoSent, message.Message)
 	end)
 end
